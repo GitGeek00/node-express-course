@@ -21,18 +21,25 @@ const getBody = (req, callback) => {
 };
 
 // here, you could declare one or more variables to store what comes back from the form.
-let item = "Enter something below.";
+let color = "ffffff";
 
 // here, you can change the form below to modify the input fields and what is displayed.
 // This is just ordinary html with string interpolation.
 const form = () => {
   return `
-  <body>
-  <p>${item}</p>
+  <body style="background-color: #${color}">
+  <script src="https://cdn.jsdelivr.net/npm/a-color-picker@1.2.1/dist/acolorpicker.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/a-color-picker@1.2.1/src/acolorpicker.min.css" rel="stylesheet">
+  <p>&nbsp;&nbsp;Background color is: #${color}</p>
   <form method="POST">
-  <input name="item"></input>
+  #<input name="color" id="colorInput"></input>
   <button type="submit">Submit</button>
+  <div class="picker" acp-color="#EFE9E7" acp-palette="red|#ffc107|rgb(255,221,0)">&nbsp;&nbsp;</div>
   </form>
+  <script>
+      AColorPicker.from('.picker')
+      .on('change', (picker, color) => {document.getElementById("colorInput").value = AColorPicker.parseColor(color,"hex").replace("#","");})
+  </script>
   </body>
   `;
 };
@@ -44,10 +51,10 @@ const server = http.createServer((req, res) => {
     getBody(req, (body) => {
       console.log("The body of the post is ", body);
       // here, you can add your own logic
-      if (body["item"]) {
-        item = body["item"];
+      if (body["color"]) {
+        color = body["color"];
       } else {
-        item = "Nothing was entered.";
+        color = "Nothing was entered.";
       }
       // Your code changes would end here
       res.writeHead(303, {
