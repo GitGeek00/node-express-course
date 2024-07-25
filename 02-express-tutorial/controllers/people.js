@@ -14,24 +14,21 @@ const addPerson = (req, res) => {
 
 const getPerson = (req, res) => {
 
-    const person = people.find((person) => {
-        return person.id === Number(req.params.id)
-    })
+    const checkPerson = checkPersonId(req, res)
 
-    if (!person) {
-        return res.status(404).json({ success: false, message: `Person with id:${req.params.id} Not found ` })
+    if (!checkPerson.success) {
+        return res.status(404).send(checkPerson)
     }
 
-    res.send({ success: true, person })
+    res.send(checkPerson.person )
 }
 
 const updatePerson = (req, res) => {
-    const person = people.find((person) => {
-        return person.id === Number(req.params.id)
-    })
 
-    if (!person) {
-        return res.status(404).json({ success: false, message: `Person with id:${req.params.id} Not found ` })
+    const checkPerson = checkPersonId(req, res)
+
+    if (!checkPerson.success) {
+        return res.status(404).send(checkPerson)
     }
 
     const newPerson = people.map((person) => {
@@ -41,20 +38,31 @@ const updatePerson = (req, res) => {
         return person
     })
 
-    res.status(200).json({ success: true, data: person })
+    res.status(200).json({ success: true, data: checkPerson.person, people })
 }
 
 const deletePerson = (req, res) => {
+   
+    const checkPerson = checkPersonId(req, res)
+
+    if (!checkPerson.success) {
+        return res.status(404).send(checkPerson)
+    }
+
+    newPeople = people.filter((person) => person.id !== Number(req.params.id))
+    res.status(200).json({ success: true, message: `Person ${req.body.name} deleted successfully`, newPeople })
+}
+
+const checkPersonId = (req, res) => {
     const person = people.find((person) => {
         return person.id === Number(req.params.id)
     })
 
     if (!person) {
-        return res.status(404).json({ success: false, message: `Person with id:${req.params.id} Not found ` })
+        return { success: false, message: `Person with id:${req.params.id} Not found ` }
     }
-
-    people.filter((person) => person.id !== Number(req.params.id))
-    res.status(200).json({ success: true, message: `Person ${req.body.name} deleted successfully` })
+  
+    return { success: true, person: person }
 }
 
 module.exports = { addPerson, getPeople, getPerson, updatePerson, deletePerson }
