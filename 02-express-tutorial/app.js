@@ -1,8 +1,23 @@
 const express = require('express')
 const app = express()
-const { products } = require("./data");
+const { products } = require("./data")
+const peopleRouter = require("./routes/people")
 
-app.use(express.static("./public"))
+const logger = (req, res, next) => {
+    time = new Date()
+    console.log(`Method: ${req.method} URL: ${req.url} Time: ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`)
+    next()
+}
+
+app.use(logger)
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
+app.use("/api/v1/people", peopleRouter);
+
+
+app.get('/', (req, res) => {
+    res.send('<h1>OK</h1>')
+})
 
 app.get('/api/v1/test', (req, res) => {
     res.status(200).json({ message: "It worked!" });
@@ -34,7 +49,7 @@ app.get('/api/v1/query', (req, res) => {
         })
     }
     if (limit) {
-         dataQuery = dataQuery.slice(0, limit)
+        dataQuery = dataQuery.slice(0, limit)
     }
     if (minPrice) {
         dataQuery = dataQuery.filter((product) => {
