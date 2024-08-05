@@ -1,0 +1,24 @@
+Quickly explain how middleware is used in an Express application.
+Answer:
+1.  Create a function who take (req, res, next) args 
+2.  Write a code which we want to execute in middleware
+3.  Add app.use(middlewareName) before controller certain functions in which each function after 
+    app.use(middlewareName) statement will execute the middleware before implement any statement.
+4.  If middleware execute next() node will return to the function and execute it 
+
+What does CRUD stand for?
+Answer:
+C = Create new document
+R = Read all documents or a single document
+U = Update document
+D = Delete document
+
+You are careful to store your sensitive information in a .env file.
+How do you get your app to access the information in the .env file?
+Answer:
+We should install a package like dotenv to be able to read env file then utilize process.env object
+to read certain key value.
+
+How do you protect the contents of the .env file so that it is not stored in your Github repository?
+Answer:
+We should add exclusion to .gitignore by adding .env in a new line
