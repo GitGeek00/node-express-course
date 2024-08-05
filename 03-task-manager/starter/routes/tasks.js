@@ -3,7 +3,7 @@ const router = express.Router()
 const { newTask, allTasks, getTask, updateTask, deleteTask } = require('../controllers/tasks')
 
 router.get('/', allTasks)
-router.post('/newTask', newTask)
+router.post('/', newTask)
 
 router.get('/:id', getTask)
 router.put('/:id', updateTask)
