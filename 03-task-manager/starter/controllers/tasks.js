@@ -14,7 +14,7 @@ const newTask = async (req, res) => {
 
 const getTask = async (req, res) => {
     const id = new ObjectId(req.params.id)
-    const task = await Task.find({ _id: id }).exec()
+    const task = await Task.findById(id).exec();
     if (!task) {
         return res.status(404).json({ "message": `No task associated with id: ${id}` })
     }
